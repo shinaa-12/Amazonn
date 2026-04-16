@@ -1,0 +1,94 @@
+{% extends "app1/base.html" %}
+
+{% block title %}Shop - Shopvibe{% endblock %}
+
+{% block content %}
+
+<style>
+/* product card layout */
+.product-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* ⭐ image center */
+    padding: 15px;
+}
+
+/* image center */
+.product-card img {
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    height: 180px;
+    object-fit: contain;
+}
+
+/* text center */
+.product-info {
+    text-align: center;
+}
+</style>
+
+<div class="shop-page">
+    <div class="shop-container">
+
+        <div class="products-section">
+            <h2>Available Products</h2>
+
+            {% if products %}
+            <div class="products-grid">
+                {% for product in products %}
+                <div class="product-card">
+
+                    
+                   {% if product.image_url %}
+                     <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                   {% else %}
+                     <div>No Image Available</div>
+                   {% endif %} 
+                   
+                   
+                  
+
+
+                    <div class="product-info">
+                        <h3>{{ product.name }}</h3>
+                        <p class="description">{{ product.description|truncatewords:15 }}</p>
+                        <p class="price">${{ product.price }}</p>
+
+                        <p class="stock {% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+                            {% if product.stock > 0 %}
+                                Stock: {{ product.stock }}
+                            {% else %}
+                                Out of Stock
+                            {% endif %}
+                        </p>
+
+                        <form method="post" class="add-to-cart-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="add">
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <button type="submit" class="btn btn-primary"
+                                {% if product.stock <= 0 %}disabled{% endif %}>
+                                Add to Cart
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="no-products">No products available.
+                <a href="{% url 'app1:add_product' %}">Add one now!</a>
+            </p>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %} 
