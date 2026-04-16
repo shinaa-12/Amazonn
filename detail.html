@@ -1,0 +1,44 @@
+{% extends "app1/base.html" %}
+{% block title %}{{ product.name }} - Shopvibe{% endblock %}
+
+{% block content %}
+<div class="product-detail" style="padding:20px;">
+    <h2>{{ product.name }}</h2>
+    {% if product.image_url %}
+        <img src="{{ product.image_url }}" alt="{{ product.name }}" width="300">
+    {% else %}
+        <div>No Image Available</div>
+    {% endif %}
+    <p><strong>Price:</strong> ₹{{ product.price }}</p>
+    <p><strong>Stock:</strong> {{ product.stock }}</p>
+    <p><strong>Description:</strong> {{ product.description }}</p>
+
+    <a href="{% url 'app1:buy' product.id %}" class="btn btn-primary">Buy now</a>
+
+
+
+</div>
+{% endblock %}
+
+
+{% comment %} {% load static %}
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<h2>Buy: {{product.name}}</h2>
+
+<form method="POST" class="buy-form">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="Enter Name" required>
+    <input type="text" name="phone" placeholder="Enter Phone" required>
+    <textarea name="address" placeholder="Enter Address" required></textarea>
+    <input type="text" name="upi" placeholder="Enter UPI ID (example@upi)" required>
+    <button type="submit" class="pay-btn">Pay & Order</button>
+</form>
+
+</body>
+</html> {% endcomment %}
+

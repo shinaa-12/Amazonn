@@ -1,0 +1,47 @@
+{% extends "app1/base.html" %}
+{% block title %}Order Confirmed - Shopvibe{% endblock %}
+
+{% block content %}
+<div style="padding:30px; max-width:700px; margin:auto; background:white;
+            border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); text-align:center;">
+
+    <h2 style="color:green;"> Order Placed Successfully!</h2>
+
+    <p>
+        Thank you <strong>{{ order.user.username }}</strong>
+        for your purchase.
+    </p>
+
+    <hr>
+
+    <p><strong>Order ID:</strong> {{ order.id }}</p>
+    <p><strong>Status:</strong> {{ order.status }}</p>
+    <p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
+    <p><strong>Order Date:</strong> {{ order.created_at|date:"d M Y, h:i A" }}</p>
+    <p><strong>Delivery Address:</strong> {{ order.shipping_address }}</p>
+
+    <hr>
+          
+
+    <h3>Ordered Items</h3>
+
+    {% for item in order.items.all %}
+        <div style="margin-bottom:20px;">
+            <img src="{{ item.product.image.url }}" width="200"
+                 style="border-radius:10px; margin:10px 0;">
+            <h4>{{ item.product.name }}</h4>
+            <p>Price: ${{ item.price }}</p>
+            <p>Quantity: {{ item.quantity }}</p>
+        </div>
+        <hr>
+    {% endfor %}
+
+    <h3>Total Paid: ₹{{ order.total_amount }}</h3>
+
+    <a href="/orders/" class="btn btn-primary"
+       style="margin-top:20px; display:inline-block;">
+        View My Orders
+    </a>
+
+</div>
+{% endblock %}
